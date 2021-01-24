@@ -1,0 +1,231 @@
+SELECT * FROM COUNTRY;
+
+SELECT * FROM CITY WHERE NAME = 'Asgard';
+
+select * FROM countrylanguage;
+
+-- DISTINCT COUNTRY FROM  C1TY
+SELECT DISTINCT COUNTRYCODE FROM CITY;
+
+-- FIND ONE COUNTRY BY CODE
+SELECT * FROM COUNTRY WHERE CODE = 'IDN';
+
+-- FIND ALL CITIES IN ONE COUNTRY
+SELECT * FROM CITY WHERE COUNTRYCODE = 'IDN';
+
+-- FIND ALL CITIES IN TWO COUNTRIES
+SELECT * FROM CITY WHERE COUNTRYCODE IN ('IDN', 'IND');
+
+-- FIND ALL LANGUAGES BY COUNTRYCODE OR LANGUAGE
+SELECT * FROM COUNTRYLANGUAGE WHERE (LANGUAGE = 'English' OR COUNTRYCODE = 'USA');
+
+-- FIND ALL COUNTRY WITH A RANGE OF POPULATION
+SELECT * FROM COUNTRY WHERE (POPULATION>200000 AND POPULATION<1000000);
+
+-- FIND ALL COUNTRY IN BETWEEN A RANGE OF POPULATION
+SELECT * FROM COUNTRY WHERE POPULATION BETWEEN 200000 AND 1000000;
+
+-- FIND COUNTRY WITH A PARTIAL NAME
+SELECT * FROM COUNTRY WHERE (NAME LIKE 'A%' AND NAME LIKE '%A');
+
+SELECT * FROM COUNTRYLANGUAGE WHERE COUNTRYCODE = 'IDN';
+
+-- INSERT DATA WITHOUT DEFINING THE COLUMN
+INSERT INTO COUNTRYLANGUAGE VALUES ('IDN', 'Ambon', 'F',2.1);
+
+-- INSERT DATA WITH DEFINING THE COLUMN
+INSERT INTO COUNTRYLANGUAGE (CountryCode, Language, IsOfficial, Percentage)
+VALUES ('IDN', 'Aceh', 'F',1.5);
+
+-- UPDATE DATA WITH CRITERIA
+UPDATE COUNTRY SET HEADOFSTATE = 'Joko Widodo' WHERE CODE = 'IDN';
+
+-- DELETE DATA WITH CRITERIA
+DELETE FROM COUNTRYLANGUAGE WHERE LANGUAGE = 'IDNNDGDG';
+
+-- FIND ONE COUNTRY BY CODE USING AN ALIAS IN FROM CLAUSE
+SELECT * FROM COUNTRY C WHERE C.CODE = 'IDN';
+
+-- FIND ONE COUNTRY BY CODE USING AN ALIAS IN ALL CLAUSE
+SELECT NAME AS NAMA FROM COUNTRY C WHERE C.CODE = 'IDN';
+
+-- --------------------------------------------------------------------------------------------------------------
+
+-- FIND ALL CITIES THAT'S NOT IN TWO COUNTRIES
+SELECT * FROM CITY WHERE COUNTRYCODE NOT IN ('IDN', 'IND');
+
+-- FIND A COUNTRY WHERE THE NAME DOESNT START WITH AN A
+SELECT * FROM COUNTRY WHERE NAME NOT LIKE 'A%'; 
+
+-- FIND A CITY USING MISSING CHARACTER(S) 
+SELECT * FROM CITY WHERE NAME LIKE 'L_ND_N';
+
+-- FIND A CITY USING MULTIPLE BEGINNING CHARACTERS
+SELECT * FROM CITY WHERE (NAME LIKE 'A%' OR NAME LIKE 'B%' OR NAME LIKE 'C%');
+
+-- FIND ALL COUNTRY THAT'S NOT IN BETWEEN A RANGE OF POPULATION
+SELECT * FROM COUNTRY
+ WHERE POPULATION NOT BETWEEN 200000 AND 1000000
+ ORDER BY Population DESC;
+
+-- FIND ALL COUNTRY THAT'S IN BETWEEN A RANGE OF POPULATION AND SURFACE AREA
+SELECT * FROM COUNTRY 
+ WHERE POPULATION ORDER BY SurfaceArea ASC, Population DESC;
+
+SELECT CODE, NAME FROM COUNTRY WHERE NAME IN ('Argentina','Brazil','China', 'Italy');
+
+SELECT * FROM COUNTRYLANGUAGE WHERE (LANGUAGE  = 'English' AND PERCENTAGE>5);
+
+SELECT * FROM City WHERE COUNTRYCODE = 'ITA' ORDER BY Population DESC;
+
+-- QUERY INNER JOIN
+SELECT CITY.NAME, COUNTRY.NAME
+FROM CITY INNER JOIN COUNTRY
+ON CITY.COUNTRYCODE=COUNTRY.CODE
+ORDER BY CITY.NAME;
+
+SELECT COUNTRY.NAME, COUNTRYLANGUAGE.LANGUAGE
+FROM COUNTRY INNER JOIN COUNTRYLANGUAGE
+ON COUNTRY.CODE=COUNTRYLANGUAGE.COUNTRYCODE
+ORDER BY COUNTRY.CODE;
+
+-- QUERY INNER JOIN (OTHER STYLE)
+SELECT CITY.NAME, COUNTRY.NAME
+FROM CITY, COUNTRY
+WHERE CITY.COUNTRYCODE=COUNTRY.CODE
+ORDER BY CITY.NAME;
+
+-- -------------------------------------------------------------------------------------------------
+INSERT INTO `world`.`city`
+(`ID`,
+`Name`,
+`CountryCode`,
+`District`,
+`Population`)
+VALUES
+(
+5000,
+'Asgard',
+NULL,
+'Asgard City',
+100
+);
+
+-- QUERY LEFT JOIN
+SELECT CITY.NAME, COUNTRY.NAME
+FROM CITY LEFT JOIN COUNTRY
+ON CITY.COUNTRYCODE=COUNTRY.CODE
+ORDER BY CITY.NAME;
+
+-- QUERY RIGHT JOIN
+SELECT CITY.NAME, COUNTRY.NAME
+FROM CITY RIGHT JOIN COUNTRY
+ON CITY.COUNTRYCODE=COUNTRY.CODE
+ORDER BY CITY.NAME;
+
+-- QUERY FULL JOIN
+SELECT CITY.NAME, COUNTRY.NAME
+FROM CITY FULL JOIN COUNTRY
+ON CITY.COUNTRYCODE=COUNTRY.CODE
+ORDER BY CITY.NAME;
+
+SELECT CITY.NAME AS CITYNAME, COUNTRY.NAME AS COUNTRYNAME, COUNTRYLANGUAGE.LANGUAGE
+FROM CITY LEFT JOIN COUNTRY ON CITY.COUNTRYCODE=COUNTRY.CODE, COUNTRYLANGUAGE
+WHERE COUNTRYLANGUAGE.COUNTRYCODE=COUNTRY.CODE
+ORDER BY COUNTRY.NAME LIMIT 10000;
+
+SELECT CITY.NAME AS CITYNAME, COUNTRY.NAME AS COUNTRYNAME, COUNTRYLANGUAGE.LANGUAGE
+FROM CITY LEFT JOIN COUNTRY ON CITY.COUNTRYCODE=COUNTRY.CODE 
+LEFT JOIN COUNTRYLANGUAGE ON COUNTRYLANGUAGE.COUNTRYCODE=COUNTRY.CODE
+ORDER BY COUNTRY.NAME LIMIT 10000;
+
+-- CREATE A DATABASE AND A TABLE AT THE SAME TIME
+CREATE DATABASE school;
+CREATE TABLE Persons(PersonID int NOT NULL UNIQUE,LastName varchar(255),
+FirstName varchar(255),Address varchar(255),City varchar(255));
+
+-- -----------------------------------------------------------------------------------------------------
+
+-- COUNT
+SELECT COUNT(NAME) AS TOTAL_CITY FROM CITY;
+
+-- AVERAGE
+SELECT AVG(Population) AS CityPopulationAverage FROM CITY WHERE CountryCode = 'AFG';
+
+-- MAX
+SELECT MAX(Population) AS MaxPopulation FROM CITY WHERE CountryCode = 'AFG';
+
+-- MIN
+SELECT MIN(Population) AS MinPopulation FROM CITY WHERE CountryCode = 'AFG';
+
+-- SUM
+SELECT SUM(Population) AS PopulationSummery FROM CITY WHERE CountryCode = 'AFG';
+
+-- insert select
+INSERT INTO countrylanguage (`CountryCode`,
+`Language`,
+`IsOfficial`,
+`Percentage`) 
+SELECT country.code as CountryCode, 'Bekasi' as Language, 'F' as IsOfficial, 1.0 as Percentage
+  FROM country WHERE name = 'Indonesia';
+
+-- UPPER CASE
+select id, ucase(name) as name, countrycode, ucase(district) as district, population 
+  from city where countrycode = 'AFG';
+
+-- LOWER CASE
+select id, lcase(name) as name, countrycode, lcase(district) as district, population 
+  from city where countrycode = 'AFG';
+
+-- MID
+select id, (name) as name, mid(name, 1, 3) as extractedField, countrycode, (district) as district, population 
+  from city where countrycode = 'AFG';
+
+-- LENGTH
+select id, (name) as name, length(name) as totalCharacterName, countrycode, (district) as district, population 
+  from city where countrycode = 'AFG';
+-- ROUND
+select countrycode, language, isofficial, round(percentage) as percentage 
+  from countrylanguage where countrycode = 'AFG';
+
+-- NOW
+select now() as NOW
+  from dual; -- dual ada lah dummy database yang di sediakan untuk keperluan testing
+
+-- FORMAT
+select format(12500.2015, 2,'de_DE');
+
+select id, name, countrycode, district, format(population, 2,'de_DE') as population
+  from city where countrycode = 'AFG';
+
+-- ------------------------------------------------------------------------------------------------------------------
+
+-- GROUP BY
+SELECT * FROM WORLD.CITY;
+
+SELECT CountryCode, COUNT(ID) AS TotalCity
+FROM CITY
+GROUP BY CountryCode;
+
+SELECT CountryCode, SUM(Population) AS CityPopulation
+FROM CITY
+GROUP BY CountryCode;
+
+SELECT B.Name, SUM(A.Population) AS CityPopulation, B.Population AS CountryPopulation
+FROM CITY AS A, COUNTRY AS B
+WHERE A.CountryCode=B.Code
+GROUP BY A.CountryCode
+HAVING SUM(A.Population) >1000000
+ORDER BY B.Name;
+
+SELECT B.Code AS CountryCode, B.Name AS CountryName, 
+ SUM(A.Population) AS CityPopulation, C.Percentage AS EnglishSpeakersPercentage
+FROM CITY AS A, COUNTRY AS B, COUNTRYLANGUAGE AS C
+WHERE A.CountryCode=B.Code
+AND B.Code=C.CountryCode
+GROUP BY B.Name
+HAVING C.Percentage > 50
+ORDER BY B.Name;
+
+-- SQL INJECTION
+SELECT * FROM COUNTRY WHERE CODE = 'IDN' OR 1=1;
